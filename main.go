@@ -14,6 +14,12 @@ const (
 	cmInMeter         = 100.0  // Количество сантиметров в одном метре
 )
 
+const (
+	SwimmingLenStep                  = 1.38 // длина одного гребка
+	SwimmingCaloriesMeanSpeedShift   = 1.1  // коэффициент изменения средней скорости
+	SwimmingCaloriesWeightMultiplier = 2.0  // множитель веса пользователя
+)
+
 // Training содержит данные о тренировке.
 type Training struct {
 	Type       string        // Тип тренировки
@@ -133,8 +139,8 @@ func (s Swimming) Calories() float64 {
 		return 0
 	}
 	const (
-		caloriesSpeedShift   = 1.1
-		caloriesWeightFactor = 2.0
+		caloriesSpeedShift   = SwimmingCaloriesMeanSpeedShift
+		caloriesWeightFactor = SwimmingCaloriesWeightMultiplier
 	)
 	return (s.meanSpeed() + caloriesSpeedShift) * caloriesWeightFactor * s.Weight * s.Duration.Hours()
 }
@@ -156,7 +162,7 @@ func main() {
 		Training: Training{
 			Type:       "Плавание",
 			Action:     2000,
-			StepLength: 1.38,
+			StepLength: SwimmingLenStep,
 			Duration:   90 * time.Minute,
 			Weight:     85,
 		},
