@@ -8,10 +8,12 @@ import (
 
 // Общие константы для вычислений.
 const (
-	metersInKm        = 1000.0 // Количество метров в одном километре
-	minutesInHour     = 60     // Количество минут в одном часе
-	defaultStepLength = 0.65   // Длина одного шага в метрах
-	cmInMeter         = 100.0  // Количество сантиметров в одном метре
+	metersInKm              = 1000.0 // Количество метров в одном километре
+	minutesInHour           = 60     // Количество минут в одном часе
+	defaultStepLength       = 0.65   // Длина одного шага в метрах
+	cmInMeter               = 100.0  // Количество сантиметров в одном метре
+	caloriesSpeedMultiplier = 18.0
+	caloriesSpeedShift      = 1.79
 )
 
 const (
@@ -92,10 +94,6 @@ func (r Running) Calories() float64 {
 	if r.Weight <= 0 || r.meanSpeed() <= 0 {
 		return 0
 	}
-	const (
-		caloriesSpeedMultiplier = 18.0
-		caloriesSpeedShift      = 1.79
-	)
 	return (caloriesSpeedMultiplier*r.meanSpeed() + caloriesSpeedShift) * r.Weight / metersInKm * r.Duration.Hours() * minutesInHour
 }
 
