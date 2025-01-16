@@ -14,6 +14,8 @@ const (
 	cmInMeter               = 100.0  // Количество сантиметров в одном метре
 	caloriesSpeedMultiplier = 18.0
 	caloriesSpeedShift      = 1.79
+	weightMultiplier        = 0.035
+	speedHeightMultiplier   = 0.029
 )
 
 const (
@@ -108,10 +110,6 @@ func (w Walking) Calories() float64 {
 	if w.Weight <= 0 || w.Height <= 0 || w.meanSpeed() <= 0 {
 		return 0
 	}
-	const (
-		weightMultiplier      = 0.035
-		speedHeightMultiplier = 0.029
-	)
 	speedMetersPerSecond := w.meanSpeed() * 1000 / 3600 // Перевод км/ч в м/с
 	return ((weightMultiplier * w.Weight) + (math.Pow(speedMetersPerSecond, 2) / (w.Height / cmInMeter) * speedHeightMultiplier * w.Weight)) * w.Duration.Hours() * minutesInHour
 }
@@ -136,11 +134,7 @@ func (s Swimming) Calories() float64 {
 	if s.Weight <= 0 || s.meanSpeed() <= 0 {
 		return 0
 	}
-	const (
-		caloriesSpeedShift   = SwimmingCaloriesMeanSpeedShift
-		caloriesWeightFactor = SwimmingCaloriesWeightMultiplier
-	)
-	return (s.meanSpeed() + caloriesSpeedShift) * caloriesWeightFactor * s.Weight * s.Duration.Hours()
+	return (s.meanSpeed() + SwimmingCaloriesMeanSpeedShift) * SwimmingCaloriesWeightMultiplier * s.Weight * s.Duration.Hours()
 }
 
 // CaloriesCalculator интерфейс для всех типов тренировок.
